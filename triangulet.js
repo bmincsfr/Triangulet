@@ -58,7 +58,7 @@ setInterval(() => {
                 opened ++
                 document.querySelector('.triangulet-hack-box').innerHTML = ''
                 document.querySelector('.triangulet-hack-box').innerHTML += `<h3 style="margin: 10px">${response.rarity} ${response.trian} (${unlocks[response.rarity][response.trian].toLocaleString()}x)</h3>`
-                document.querySelector('.triangulet-hack-box').innerHTML += `<p style="margin: 0px">Coded by <a href="https://github.com/Piotr1178/Triangulet">Piotr</a>`
+                document.querySelector('.triangulet-hack-box').innerHTML += `<p style="margin: 0px">Coded by <a href="https://github.com/bmincsfr/Triangulet">Bmincs</a>`
                 document.querySelector('.triangulet-hack-box').innerHTML += `<p style="margin: 0px">RECENT UNIQUE: ${unique}</p>`
                 document.querySelector('.triangulet-hack-box').innerHTML += `<p style="margin: 0px">CAPSULES OPENED: ${opened.toLocaleString()}</p>`
                 document.querySelector('.triangulet-hack-box').innerHTML += `<button type="button" class="openerStop" style="background-color: #039162; color: white; padding: 9px; border-radius: 8px; height: fit-content; width: fit-content; font-size: 15px; font-family: Nunito; border: none; box-shadow: 0px 7px 0px 0px #01744e; cursor: pointer; transition: .3s ease; margin: 9px;" onclick="run()">Stop Opener</button>`
@@ -112,8 +112,5 @@ function dragElement(elmnt) {
   }
 }
 
-// Thanks for supporting me and my hacks: https://discord.gg/SvEhNNJWB2
+// Thanks for supporting me and my hacks: @bmincs
 console.log('%cThank you for using my hacks! 👍', 'font-size: 25px')
-console.log('%cYou can find more hacks by Piotr using the link below:', 'font-size: 15px')
-console.log('%chttps://github.com/Piotr1178/Triangulet/tree/main/hacks', 'font-size: 18px')
-console.log('%chttps://discord.gg/SvEhNNJWB2', 'font-size: 13px')
