@@ -19,74 +19,138 @@
     let running = false;
     let inFlight = false;
     let selectedPack = null;
+    let minimized = false;
 
     // === CREATE UI ===
     const box = document.createElement('div');
     Object.assign(box.style, {
-        position: 'fixed', top: '10px', right: '10px', width: '320px', padding: '14px',
-        background: '#d1d1d1', border: '2px solid rgba(0,0,0,0.6)', borderRadius: '12px',
+        position: 'fixed', top: '10px', right: '10px', width: '260px', padding: '10px',
+        background: '#1e1e1e', color: '#eee', border: '2px solid #444', borderRadius: '12px',
         zIndex: '2147483647', display: 'flex', flexDirection: 'column',
-        boxShadow: '0 6px 18px rgba(0,0,0,0.6)', fontFamily: 'Nunito,sans-serif', color:'#000'
+        boxShadow: '0 6px 18px rgba(0,0,0,0.8)', fontFamily: 'Nunito,sans-serif',
+        transition: 'width 0.2s, height 0.2s', resize: 'both', overflow: 'auto',
+        maxWidth: '400px', maxHeight: '600px'
     });
     document.body.appendChild(box);
 
-    const header = document.createElement('h3');
-    header.textContent = 'Capsule Opener';
-    header.style.margin = '0 0 8px 0';
-    box.appendChild(header);
+    // Header container
+    const headerContainer = document.createElement('div');
+    headerContainer.style.display = 'flex';
+    headerContainer.style.justifyContent = 'space-between';
+    headerContainer.style.alignItems = 'center';
+    box.appendChild(headerContainer);
 
+    const header = document.createElement('h4');
+    header.textContent = 'Capsule Opener by Bmincs';
+    header.style.margin = '0';
+    header.style.flex = '1';
+    header.style.fontSize = '14px';
+    header.style.userSelect = 'none';
+    headerContainer.appendChild(header);
+
+    const buttonsContainer = document.createElement('div');
+    buttonsContainer.style.display = 'flex';
+    buttonsContainer.style.gap = '4px';
+    headerContainer.appendChild(buttonsContainer);
+
+    const minimizeBtn = document.createElement('button');
+    minimizeBtn.textContent = '–';
+    Object.assign(minimizeBtn.style, {
+        cursor: 'pointer', fontWeight: 'bold', fontSize: '16px',
+        border: 'none', background: 'transparent', color: '#eee'
+    });
+    buttonsContainer.appendChild(minimizeBtn);
+
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = '×';
+    Object.assign(closeBtn.style, {
+        cursor: 'pointer', fontWeight: 'bold', fontSize: '16px',
+        border: 'none', background: 'transparent', color: '#f33'
+    });
+    buttonsContainer.appendChild(closeBtn);
+
+    const content = document.createElement('div');
+    content.style.display = 'flex';
+    content.style.flexDirection = 'column';
+    content.style.gap = '6px';
+    box.appendChild(content);
+
+    // Pack select
     const packSelect = document.createElement('select');
-    packSelect.style.width = '100%';
-    packSelect.style.padding = '8px';
-    packSelect.style.marginBottom = '8px';
+    Object.assign(packSelect.style, {
+        width: '100%', padding: '6px', marginBottom: '6px', background: '#333', color: '#eee', border: '1px solid #555', borderRadius: '6px'
+    });
     packSelect.disabled = true;
-    box.appendChild(packSelect);
+    content.appendChild(packSelect);
 
+    // Buttons
     const controls = document.createElement('div');
     controls.style.display = 'flex';
-    controls.style.gap = '8px';
-    box.appendChild(controls);
+    controls.style.gap = '6px';
+    content.appendChild(controls);
 
     const startBtn = document.createElement('button');
     startBtn.textContent = 'Start';
-    Object.assign(startBtn.style, { flex: '1', padding: '8px', background: '#039162', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', boxShadow: '0 6px 0 #01744e' });
+    Object.assign(startBtn.style, {
+        flex: '1', padding: '6px', background: '#039162', color: 'white', border: 'none',
+        borderRadius: '6px', cursor: 'pointer', boxShadow: '0 4px 0 #01744e'
+    });
     startBtn.disabled = true;
     controls.appendChild(startBtn);
 
     const stopBtn = document.createElement('button');
     stopBtn.textContent = 'Stop';
-    Object.assign(stopBtn.style, { flex: '1', padding: '8px', background: '#b30000', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', boxShadow: '0 6px 0 #760000' });
+    Object.assign(stopBtn.style, {
+        flex: '1', padding: '6px', background: '#b30000', color: 'white', border: 'none',
+        borderRadius: '6px', cursor: 'pointer', boxShadow: '0 4px 0 #760000'
+    });
     stopBtn.disabled = true;
     controls.appendChild(stopBtn);
 
+    // Info text
     const recent = document.createElement('p');
     recent.textContent = `RECENT UNIQUE: ${unique}`;
-    recent.style.margin = '6px 0';
-    box.appendChild(recent);
+    recent.style.margin = '4px 0';
+    content.appendChild(recent);
 
     const openedEl = document.createElement('p');
     openedEl.textContent = `CAPSULES OPENED: ${opened.toLocaleString()}`;
-    openedEl.style.margin = '6px 0';
-    box.appendChild(openedEl);
+    openedEl.style.margin = '4px 0';
+    content.appendChild(openedEl);
 
+    // Logs
     const logs = document.createElement('div');
-    Object.assign(logs.style, { maxHeight: '200px', overflow: 'auto', marginTop: '6px', background: 'rgba(255,255,255,0.6)', padding: '8px', borderRadius: '6px', fontSize: '13px' });
+    Object.assign(logs.style, {
+        maxHeight: '140px', overflow: 'auto', background: '#222', padding: '6px',
+        borderRadius: '6px', fontSize: '12px', color: '#eee'
+    });
     logs.textContent = 'No actions yet.';
-    box.appendChild(logs);
+    content.appendChild(logs);
 
     const counts = document.createElement('div');
-    counts.style.marginTop = '8px';
-    box.appendChild(counts);
+    counts.style.marginTop = '6px';
+    content.appendChild(counts);
+
+    // BUTTONS
+    minimizeBtn.addEventListener('click', () => {
+        minimized = !minimized;
+        content.style.display = minimized ? 'none' : 'flex';
+        box.style.width = minimized ? '140px' : '260px';
+    });
+
+    closeBtn.addEventListener('click', () => {
+        box.remove();
+    });
 
     function addLogLine(text, type = 'info') {
         const el = document.createElement('div');
         el.textContent = text;
-        if (type === 'error') el.style.color = '#900';
+        if (type === 'error') el.style.color = '#f55';
         logs.appendChild(el);
         logs.scrollTop = logs.scrollHeight;
     }
 
-    // === FETCH PACKS ===
+    // FETCH PACKS
     try {
         const res = await fetch(API_PACKS, { headers: { Accept: 'application/json', authorization: AUTH, 'Content-Type': 'application/json' } });
         if (!res.ok) throw new Error(`Failed to fetch packs: ${res.status}`);
@@ -125,20 +189,20 @@
         rarities.forEach(r => {
             const title = document.createElement('div');
             title.style.fontWeight = '700';
-            title.style.marginTop = '6px';
+            title.style.marginTop = '4px';
             title.textContent = r;
             counts.appendChild(title);
             const items = unlocks[r];
             if (!items || Object.keys(items).length === 0) {
                 const none = document.createElement('div');
                 none.textContent = '—';
-                none.style.fontSize = '13px';
+                none.style.fontSize = '12px';
                 counts.appendChild(none);
             } else {
                 Object.keys(items).forEach(k => {
                     const line = document.createElement('div');
                     line.textContent = `${k}: ${items[k].toLocaleString()}x`;
-                    line.style.fontSize = '13px';
+                    line.style.fontSize = '12px';
                     counts.appendChild(line);
                 });
             }
@@ -204,7 +268,7 @@
     (function drag(el) {
         let isDown = false, startX = 0, startY = 0, startLeft = 0, startTop = 0;
         el.style.cursor = 'move';
-        el.addEventListener('mousedown', e => {
+        header.addEventListener('mousedown', e => {
             if (['INPUT','SELECT','BUTTON'].includes(e.target.tagName)) return;
             isDown = true;
             startX = e.clientX; startY = e.clientY;
@@ -224,10 +288,10 @@
 
     // Footer
     const footer = document.createElement('div');
-    footer.style.marginTop = '8px';
-    footer.style.fontSize = '12px';
-    footer.innerHTML = `Coded by <a href="https://github.com/bmincsfr/Triangulet" target="_blank">Bmincs</a>`;
-    box.appendChild(footer);
+    footer.style.marginTop = '6px';
+    footer.style.fontSize = '11px';
+    footer.innerHTML = `Coded by <a href="https://github.com/bmincsfr/Triangulet" target="_blank" style="color:#6cf">Bmincs</a>`;
+    content.appendChild(footer);
 
     console.log('%cTriangulet opener loaded', 'font-size:16px;color:green');
 })();
