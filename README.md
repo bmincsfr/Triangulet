@@ -6,3 +6,4 @@ Triangulet Hacks for anyone to use!
 Use all  _hacks_ at your own risk as you could get _suspended_ if added to the game.
 <sub>It is not my fault if you get banned which you shouldn't</sub>
 
+Created for https://blacket.neocities.org/ and https://trian.neocities.org/ !
