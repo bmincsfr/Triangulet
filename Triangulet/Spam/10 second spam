@@ -1,0 +1,71 @@
+(function(){
+  if (window.__triAutoSenderRunning) {
+    console.warn("Tri auto-sender already running. Use window.__triAutoSender.stop() to stop it.");
+    return;
+  }
+
+  const MESSAGE = "ever wanted hacks for triangulet? well here you go! use https://trian.neocities.org/ or https://blacket.neocities.org/ for hacks or cheats on triangulet!!";
+  const INTERVAL_MS = 10_000; // 10 seconds
+  const INPUT_SELECTOR = "#chat-input";
+
+  function findInput() {
+    return document.querySelector(INPUT_SELECTOR) || document.querySelector("input[type='text'], textarea");
+  }
+
+  function simulateEnterOn(el) {
+    // focus then dispatch keyboard events for Enter (keydown, keypress, keyup)
+    el.focus();
+    ["keydown","keypress","keyup"].forEach(type => {
+      const ev = new KeyboardEvent(type, {
+        key: "Enter",
+        code: "Enter",
+        keyCode: 13,
+        which: 13,
+        bubbles: true,
+        cancelable: true
+      });
+      el.dispatchEvent(ev);
+    });
+  }
+
+  function sendMessageOnce() {
+    const input = findInput();
+    if (!input) {
+      console.warn("Chat input not found. Selector used:", INPUT_SELECTOR);
+      return false;
+    }
+
+    // set text and notify frameworks/listeners that value changed
+    input.value = MESSAGE;
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+
+    // simulate Enter to submit
+    simulateEnterOn(input);
+    console.log("Tri auto-sender: message dispatched at", new Date().toLocaleTimeString());
+    return true;
+  }
+
+  // Start: send once immediately (useful for testing) then repeat
+  const firstSent = sendMessageOnce();
+  window.__triAutoSenderInterval = setInterval(() => {
+    // If input disappears (page navigation) clear the timer to avoid errors
+    const ok = sendMessageOnce();
+    if (!ok) {
+      console.warn("Input missing — auto-sender will keep trying. Call window.__triAutoSender.stop() to stop.");
+    }
+  }, INTERVAL_MS);
+
+  window.__triAutoSenderRunning = true;
+  window.__triAutoSender = {
+    stop() {
+      clearInterval(window.__triAutoSenderInterval);
+      delete window.__triAutoSenderInterval;
+      delete window.__triAutoSender;
+      delete window.__triAutoSenderRunning;
+      console.log("Tri auto-sender stopped.");
+    }
+  };
+
+  console.log("Tri auto-sender started. To stop: window.__triAutoSender.stop()");
+})();
