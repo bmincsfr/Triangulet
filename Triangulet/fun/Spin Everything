@@ -1,0 +1,11 @@
+// Spin Everything
+if (!window.__spinInterval) {
+  const spinEls = document.querySelectorAll("div, span, button, img, a, text");
+  spinEls.forEach(el => el.style.transition = "transform 3s linear");
+  window.__spinInterval = setInterval(() => {
+    spinEls.forEach(el => {
+      el.style.transform = `rotate(${(Date.now()/10)%360}deg)`;
+    });
+  }, 50);
+  console.log("Spin Mode ON. To stop: clearInterval(window.__spinInterval)");
+}
