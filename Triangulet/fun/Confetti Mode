@@ -1,0 +1,21 @@
+// Confetti Explosion
+if (!window.__confettiInterval) {
+  window.__confettiInterval = setInterval(() => {
+    const c = document.createElement("div");
+    c.innerText = "🎉";
+    c.style.position = "fixed";
+    c.style.left = Math.random() * window.innerWidth + "px";
+    c.style.top = "-20px";
+    c.style.fontSize = (15 + Math.random()*20) + "px";
+    c.style.transition = "top 2s linear";
+    c.style.zIndex = 999999;
+    document.body.appendChild(c);
+
+    requestAnimationFrame(() => {
+      c.style.top = window.innerHeight + "px";
+    });
+
+    setTimeout(() => c.remove(), 2000);
+  }, 200);
+  console.log("Confetti Mode ON. To stop: clearInterval(window.__confettiInterval)");
+}
