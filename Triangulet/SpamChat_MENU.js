@@ -6,7 +6,7 @@
 
     // === GLOBAL CONFIG ===
     window.triSpamConfig = {
-        message: "ever wanted hacks for triangulet? well here you go! use https://trian.neocities.org/ or https://blacket.neocities.org/ for hacks or cheats on triangulet!!"
+        message: "ever wanted hacks for triangulet? well here you go! use https://trian.neocities.org/ , https://github.com/bmincsfr/Triangulet/ , or https://blacket.neocities.org/ for hacks or cheats on triangulet!! Make sure to check out Blueket! https://blueket.neocities.org/ The fist Blue Blooket Private Server Ever Created by Bmincs"
     };
 
     // === MODULES ===
