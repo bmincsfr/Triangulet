@@ -38,13 +38,16 @@
         };
     }
 
-    // Create all spam modules
+    // === Create all normal spam modules ===
     modules.triChatSpam01s = createSpamModule(100, "Auto Chat Spammer (0.1s)");
     modules.triChatSpam1s = createSpamModule(1000, "Auto Chat Spammer (1s)");
     modules.triChatSpam3s = createSpamModule(3000, "Auto Chat Spammer (3s)");
     modules.triChatSpam5s = createSpamModule(5000, "Auto Chat Spammer (5s)");
     modules.triChatSpam10s = createSpamModule(10000, "Auto Chat Spammer (10s)");
     modules.triChatSpam30s = createSpamModule(30000, "Auto Chat Spammer (30s)");
+
+    // === Safe Fast Spam (interval ≥ 300ms) ===
+    modules.triChatSpamSafeFast = createSpamModule(300, "Safe Fast Spam (300ms min)");
 
     // === CREATE UI ===
     const box = document.createElement("div");
