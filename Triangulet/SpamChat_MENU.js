@@ -12,32 +12,39 @@
     // === MODULES ===
     const modules = {};
 
-    // 3s spam
-    modules.triChatSpam3s = (function(){
-        const INTERVAL_MS = 3000; let interval=null;
-        function findInput(){return document.querySelector("#chat-input")||document.querySelector("input[type='text'], textarea");}
-        function simulateEnter(el){el.focus();["keydown","keypress","keyup"].forEach(type=>{el.dispatchEvent(new KeyboardEvent(type,{key:"Enter",code:"Enter",keyCode:13,which:13,bubbles:true}));});}
-        function send(){const MESSAGE=window.triSpamConfig.message; const input=findInput(); if(!input)return false; input.value=MESSAGE; input.dispatchEvent(new Event("input",{bubbles:true})); input.dispatchEvent(new Event("change",{bubbles:true})); simulateEnter(input); return true;}
-        return {start(){if(interval)return; send(); interval=setInterval(send,INTERVAL_MS); console.log("[3s Spam] started.");}, stop(){if(!interval)return; clearInterval(interval); interval=null; console.log("[3s Spam] stopped.");}, name:"Auto Chat Spammer (3s)"};
-    })();
+    function createSpamModule(intervalMs, name) {
+        let interval = null;
+        function findInput() { return document.querySelector("#chat-input") || document.querySelector("input[type='text'], textarea"); }
+        function simulateEnter(el) {
+            el.focus();
+            ["keydown","keypress","keyup"].forEach(type => {
+                el.dispatchEvent(new KeyboardEvent(type,{key:"Enter",code:"Enter",keyCode:13,which:13,bubbles:true}));
+            });
+        }
+        function send() {
+            const MESSAGE = window.triSpamConfig.message;
+            const input = findInput();
+            if(!input) return false;
+            input.value = MESSAGE;
+            input.dispatchEvent(new Event("input",{bubbles:true}));
+            input.dispatchEvent(new Event("change",{bubbles:true}));
+            simulateEnter(input);
+            return true;
+        }
+        return {
+            start() { if(interval) return; send(); interval = setInterval(send, intervalMs); console.log(`[${name}] started.`); },
+            stop() { if(!interval) return; clearInterval(interval); interval = null; console.log(`[${name}] stopped.`); },
+            name: name
+        };
+    }
 
-    // 5s spam
-    modules.triChatSpam5s = (function(){
-        const INTERVAL_MS = 5000; let interval=null;
-        function findInput(){return document.querySelector("#chat-input")||document.querySelector("input[type='text'], textarea");}
-        function simulateEnter(el){el.focus();["keydown","keypress","keyup"].forEach(type=>{el.dispatchEvent(new KeyboardEvent(type,{key:"Enter",code:"Enter",keyCode:13,which:13,bubbles:true}));});}
-        function send(){const MESSAGE=window.triSpamConfig.message; const input=findInput(); if(!input)return false; input.value=MESSAGE; input.dispatchEvent(new Event("input",{bubbles:true})); input.dispatchEvent(new Event("change",{bubbles:true})); simulateEnter(input); return true;}
-        return {start(){if(interval)return; send(); interval=setInterval(send,INTERVAL_MS); console.log("[5s Spam] started.");}, stop(){if(!interval)return; clearInterval(interval); interval=null; console.log("[5s Spam] stopped.");}, name:"Auto Chat Spammer (5s)"};
-    })();
-
-    // 10s spam
-    modules.triChatSpam10s = (function(){
-        const INTERVAL_MS = 10000; let interval=null;
-        function findInput(){return document.querySelector("#chat-input")||document.querySelector("input[type='text'], textarea");}
-        function simulateEnter(el){el.focus();["keydown","keypress","keyup"].forEach(type=>{el.dispatchEvent(new KeyboardEvent(type,{key:"Enter",code:"Enter",keyCode:13,which:13,bubbles:true}));});}
-        function send(){const MESSAGE=window.triSpamConfig.message; const input=findInput(); if(!input)return false; input.value=MESSAGE; input.dispatchEvent(new Event("input",{bubbles:true})); input.dispatchEvent(new Event("change",{bubbles:true})); simulateEnter(input); return true;}
-        return {start(){if(interval)return; send(); interval=setInterval(send,INTERVAL_MS); console.log("[10s Spam] started.");}, stop(){if(!interval)return; clearInterval(interval); interval=null; console.log("[10s Spam] stopped.");}, name:"Auto Chat Spammer (10s)"};
-    })();
+    // Create all spam modules
+    modules.triChatSpam01s = createSpamModule(100, "Auto Chat Spammer (0.1s)");
+    modules.triChatSpam1s = createSpamModule(1000, "Auto Chat Spammer (1s)");
+    modules.triChatSpam3s = createSpamModule(3000, "Auto Chat Spammer (3s)");
+    modules.triChatSpam5s = createSpamModule(5000, "Auto Chat Spammer (5s)");
+    modules.triChatSpam10s = createSpamModule(10000, "Auto Chat Spammer (10s)");
+    modules.triChatSpam30s = createSpamModule(30000, "Auto Chat Spammer (30s)");
 
     // === CREATE UI ===
     const box = document.createElement("div");
