@@ -6,7 +6,7 @@
 
     // === GLOBAL CONFIG ===
     window.triSpamConfig = {
-        message: "Check out Boofet! https://blooket.nekoweb.org/ The first Ever Blooket Public Server"
+        message: "Check out Boofet! https://blooket.nekoweb.org/ The first Ever Blooket Public Server!"
     };
 
     // === MODULES ===
